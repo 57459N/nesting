@@ -4,5 +4,5 @@ from rectangle import Rectangle
 
 class BaseMethod(ABC):
     @staticmethod
-    def pack(rects: list[Rectangle], width: float) -> list[Rectangle]:
+    def pack(_rects: list[Rectangle], width: float) -> (list[Rectangle], float):
         pass

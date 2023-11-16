@@ -1,7 +1,11 @@
+import random
 from random import randint
 from tkinter import *
-from packing_methods.next_fit_decreasing_hight import NFDH
 from rectangle import Rectangle
+from packing_methods.next_fit_decreasing_high import NFDH
+from packing_methods.first_fit_decreasing_high import FFDH
+from packing_methods.burke import Burke
+
 
 class MainFrame(Tk):
     def __init__(self, width, height, *args, **kwargs):
@@ -36,22 +40,36 @@ class MainFrame(Tk):
 
 
 def main():
-    RECT_AMOUNT = 10
+    random.seed(1)
 
-    width = 500
-    height = 500
-    window = MainFrame(width, height)
+    RECT_AMOUNT = 50
 
-    window.create_rectangle(10, 10, width - 10, height - 10, outline='red')
-    rs = [Rectangle(randint(50, 100),
-                    randint(50, 100),
-                    randint(10, 400),
-                    randint(10, 400)) for i in range(1, RECT_AMOUNT)]
+    width = 1500
+    height = 1080
 
-    rs_packed = NFDH.pack(rs, width)
-    window.draw_rectangles(rs_packed)
+    rs = [Rectangle(randint(10, 250),
+                    randint(10, 250),
+                    0,
+                    0,
+                    fill=random.choice(['#673147', '#ADD8E6']),
+                    outline='black') for _ in range(1, RECT_AMOUNT)]
 
-    window.mainloop()
+    methods = [Burke, FFDH, NFDH]
+
+    windows = []
+
+    for m in methods:
+        packed, h = m.pack(rs, width)
+
+        w = MainFrame(width, height)
+        w.title(f'{m.__name__} - {h}')
+        w.draw_rectangles(packed)
+        windows.append(w)
+        print(m.__name__, ' packed')
+
+    while True:
+        for w in windows:
+            w.update()
 
 
 if __name__ == '__main__':

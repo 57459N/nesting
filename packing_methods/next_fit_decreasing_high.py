@@ -1,17 +1,13 @@
 import copy
 
-from packing_methods.base_method import BaseMethod
+from .base_method import BaseMethod
 from rectangle import Rectangle
 
 
 class NFDH(BaseMethod):
     @staticmethod
-    def pack(_rects: list[Rectangle], width: float) -> list[Rectangle]:
+    def pack(_rects: list[Rectangle], width: float) -> (list[Rectangle], float):
         rects = copy.deepcopy(_rects)
-
-        w = 0
-        h = 0
-        i = 1
 
         rects.sort(key=lambda r: -r.height)
 
@@ -22,7 +18,7 @@ class NFDH(BaseMethod):
         next_h = rects[0].height
         w = rects[0].width
 
-        for idx, r in enumerate(rects[1:]):
+        for r in rects[1:]:
             if width - w >= r.width:
                 r.x = w
                 r.y = h
@@ -34,4 +30,4 @@ class NFDH(BaseMethod):
                 r.y = h
                 w = r.width
 
-        return rects
+        return rects, next_h
